@@ -8,6 +8,8 @@ func main() {
 	values := []int{1, 2, 3, 4, 5}
 	for _, v := range values {
 		log.Printf("Sending %d...", v)
+		// Deadlock!
+		// c <- v
 		go func(v int) {
 			c <- v
 		}(v)
