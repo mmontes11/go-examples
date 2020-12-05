@@ -19,7 +19,7 @@ func main() {
 	// Deadlock!
 	// log.Println(<-c)
 
-	log.Print("Sending 4")
+	log.Print("Sending 4...")
 	c <- 4
 
 	log.Printf("Received %d", <-c)
