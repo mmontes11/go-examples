@@ -12,8 +12,11 @@ const (
 	endpoint = "/api"
 )
 
-// NewAPI creates a new API
-func NewAPI() {
+func main() {
+	newAPI()
+}
+
+func newAPI() {
 	r := mux.NewRouter()
 	r.HandleFunc(endpoint, handleRequest)
 	log.Println("Server listening at", port)
