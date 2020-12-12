@@ -6,20 +6,20 @@ import (
 )
 
 type counter struct {
-	v   int
-	mux sync.RWMutex
+	value int
+	mux   sync.RWMutex
 }
 
 func (c *counter) increment() {
 	c.mux.Lock()
 	defer c.mux.Unlock()
-	c.v++
+	c.value++
 }
 
-func (c *counter) value() int {
+func (c *counter) getValue() int {
 	c.mux.RLock()
 	defer c.mux.RUnlock()
-	return c.v
+	return c.value
 }
 
 func increment(counter *counter, wg *sync.WaitGroup) {
@@ -41,5 +41,5 @@ func main() {
 
 	wg.Wait()
 
-	log.Printf("Counter: %d", c.value())
+	log.Printf("Counter: %d", c.getValue())
 }

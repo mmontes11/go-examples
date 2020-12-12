@@ -6,14 +6,14 @@ import (
 	"sync/atomic"
 )
 
-func increment(counter *uint64, wg *sync.WaitGroup) {
+func increment(counter *int32, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	atomic.AddUint64(counter, 1)
+	atomic.AddInt32(counter, 1)
 }
 
 func main() {
-	counter := uint64(0)
+	counter := int32(0)
 	wg := sync.WaitGroup{}
 
 	for i := 0; i < 50; i++ {
@@ -25,5 +25,5 @@ func main() {
 
 	wg.Wait()
 
-	log.Printf("Counter: %d", counter)
+	log.Printf("Counter: %d", atomic.LoadInt32(&counter))
 }

@@ -13,7 +13,7 @@ type incrementOp struct {
 	op
 }
 
-type valueOp struct {
+type getValueOp struct {
 	op
 }
 
@@ -25,8 +25,8 @@ func newIncrementOp() incrementOp {
 	}
 }
 
-func newValueOp() valueOp {
-	return valueOp{
+func newGetValueOp() getValueOp {
+	return getValueOp{
 		op: op{
 			res: make(chan int),
 		},
@@ -43,16 +43,17 @@ func increment(ops chan<- incrementOp, wg *sync.WaitGroup) {
 
 func main() {
 	incrementOps := make(chan incrementOp)
-	valueOps := make(chan valueOp)
+	getValueOps := make(chan getValueOp)
+
 	go func() {
-		val := 0
+		counter := 0
 		for {
 			select {
 			case op := <-incrementOps:
-				val++
-				op.res <- val
-			case op := <-valueOps:
-				op.res <- val
+				counter++
+				op.res <- counter
+			case op := <-getValueOps:
+				op.res <- counter
 			}
 		}
 	}()
@@ -68,8 +69,8 @@ func main() {
 
 	wg.Wait()
 
-	valueOp := newValueOp()
-	valueOps <- valueOp
+	getValueOp := newGetValueOp()
+	getValueOps <- getValueOp
 
-	log.Printf("Counter: %d", <-valueOp.res)
+	log.Printf("Counter: %d", <-getValueOp.res)
 }
