@@ -12,10 +12,20 @@ func pong(source <-chan string, target chan<- string) {
 }
 
 func main() {
-	pingChan := make(chan string, 1)
-	pongChan := make(chan string, 1)
+	pingChan := make(chan string)
+	pongChan := make(chan string)
 
-	ping(pingChan, "Hello world!")
+	go pong(pingChan, pongChan)
+	// Deadlock!
+	// pong(pingChan, pongChan)
+	ping(pingChan, "Hello unbuffered world!")
+
+	log.Println(<-pongChan)
+
+	pingChan = make(chan string, 1)
+	pongChan = make(chan string, 1)
+
+	ping(pingChan, "Hello buffered world!")
 	pong(pingChan, pongChan)
 
 	log.Println(<-pongChan)
