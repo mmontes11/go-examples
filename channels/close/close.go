@@ -4,7 +4,7 @@ import "log"
 
 func main() {
 	jobs := make(chan int, 5)
-	done := make(chan bool)
+	done := make(chan struct{})
 
 	go func() {
 		for {
@@ -13,7 +13,7 @@ func main() {
 				log.Printf("Received job %d", j)
 			} else {
 				log.Print("No more jobs")
-				done <- true
+				done <- struct{}{}
 				return
 			}
 		}

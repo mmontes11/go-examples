@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func fibonacci(c, quit chan int) {
+func fibonacci(c chan int, quit chan struct{}) {
 	x, y := 0, 1
 	for {
 		select {
@@ -17,12 +17,12 @@ func fibonacci(c, quit chan int) {
 
 func main() {
 	c := make(chan int)
-	quit := make(chan int)
+	quit := make(chan struct{})
 	go func() {
 		for i := 0; i < 10; i++ {
 			fmt.Println(<-c)
 		}
-		quit <- 0
+		quit <- struct{}{}
 	}()
 	fibonacci(c, quit)
 }
