@@ -1,2 +1,2 @@
 # go-examples
-Golang examples
+Miscellaneous Go examples for learning purposes
